@@ -178,9 +178,8 @@ for my_dir in subdirs:
     resources['nodes'] = 1
     resources['walltime'] = 21600
     task = {}
-    task['cmd'] = ''
     task['image'] = image_name
-    task['runtime'] = 'udocker'
+    task['runtime'] = 'singularity'
     task['workdir'] = '/tmp/work_dir'
     artifact1 = {}
     artifact1['url'] = tarball
