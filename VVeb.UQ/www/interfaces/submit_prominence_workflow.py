@@ -180,7 +180,7 @@ for my_dir in subdirs:
     task = {}
     task['image'] = image_name
     task['runtime'] = 'singularity'
-    task['workdir'] = '/tmp/work_dir'
+    task['workdir'] = '/tmp/work_dir' # Don't use /tmp!
     artifact1 = {}
     artifact1['url'] = tarball
     artifact1['mountpoint'] = '%s:/tmp/work_dir' % my_dir
