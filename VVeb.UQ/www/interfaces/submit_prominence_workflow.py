@@ -177,20 +177,20 @@ for my_dir in subdirs:
     resources['disk'] = 10
     resources['nodes'] = 1
     resources['walltime'] = 21600
-    task = {}
-    task['image'] = image_name
-    task['runtime'] = 'singularity'
-    task['workdir'] = '/tmp/work_dir' # Don't use /tmp!
+    # --- Using /tmp/work_dir causes problems (please don't try to mount in /tmp), so using a workaround
+    task1 = {'image': image_name, 'runtime': 'singularity', 'cmd': 'mv %s /tmp/work_dir' % my_dir}
+    task2 = {'image': image_name, 'runtime': 'singularity', 'workdir': '/tmp/work_dir'}
+    task3 = {'image': image_name, 'runtime': 'singularity', 'cmd': 'mv /tmp/work_dir %s' % my_dir}
     artifact1 = {}
     artifact1['url'] = tarball
-    artifact1['mountpoint'] = '%s:/tmp/work_dir' % my_dir
+    #artifact1['mountpoint'] = '%s:/tmp/work_dir' % my_dir
     artifact2 = {}
     artifact2['url'] = 'VVebUQ_user_interface.tgz'
     artifact2['mountpoint'] = 'VVebUQ_user_interface:/VVebUQ_user_interface'
     job = {}
     job['name'] = '%s' % my_dir
     job['name'] = job['name'].replace('.', '_')
-    job['tasks'] = [task]
+    job['tasks'] = [task1, task2, task3]
     job['resources'] = resources
     job['artifacts'] = [artifact1,artifact2]
     job['outputDirs'] = [my_dir]
