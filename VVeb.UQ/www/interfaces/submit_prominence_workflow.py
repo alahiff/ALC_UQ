@@ -212,7 +212,7 @@ with open('prominence_workflow.json', 'w') as outfile:
 
 # --- Submit Workflow
 response = requests.post('%s/workflows' % os.getenv('PROMINENCE_URL'),
-                         headers={"Authorization":"Bearer %s" % token},
+                         headers=headers,
                          timeout=500,
                          json=workflow)
 
