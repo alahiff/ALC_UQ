@@ -211,20 +211,14 @@ with open('prominence_workflow.json', 'w') as outfile:
     json.dump(workflow, outfile)
 
 # --- Submit Workflow
-cmd = 'prominence run prominence_workflow.json'
-process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-process.wait()
-output = str(process.stdout.read(),'utf-8')
-# --- Record Workflow id
-workflow_id = output.partition('Workflow created with id ')[2].strip()
-if (workflow_id == ''):
-    time.sleep(10.0)
-    cmd = 'prominence list workflows | grep "'+my_run+'"'
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    process.wait()
-    output = str(process.stdout.read(),'utf-8')
-    workflow_id = output.partition(my_run)[0].strip()
-with open('prominence_workflow_id.txt', 'w') as outfile:
-    outfile.write(workflow_id)
+response = requests.post('%s/workflows' % os.getenv('PROMINENCE_URL'),
+                         headers={"Authorization":"Bearer %s" % token},
+                         timeout=500,
+                         json=workflow)
 
+if response.status_code == 201:
+    if 'id' in response.json():
+        workflow_id = response.json()['id']
+        with open('prominence_workflow_id.txt', 'w') as outfile:
+            outfile.write(workflow_id)
 
