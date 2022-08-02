@@ -220,5 +220,5 @@ if response.status_code == 201:
     if 'id' in response.json():
         workflow_id = response.json()['id']
         with open('prominence_workflow_id.txt', 'w') as outfile:
-            outfile.write(workflow_id)
+            outfile.write('%d' % workflow_id)
 
